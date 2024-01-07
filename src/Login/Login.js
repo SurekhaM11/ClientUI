@@ -15,7 +15,14 @@ export const Login = () => {
   };
 
   const handleLogin = () => {
-    handleFormValidation();
+    const [isForminvalid, clonedInputControls, dataObj] =
+      handleFormValidation(inputControls);
+
+    if (isForminvalid) {
+      setInutControls(clonedInputControls);
+      return;
+    }
+    console.log("some fdsf", dataObj);
   };
   return (
     <div className="container-fluid">

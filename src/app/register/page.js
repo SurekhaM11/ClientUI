@@ -1,6 +1,58 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import styles from "./register.module.css";
-export const Register = () => {
-  return <div className={styles.clr}>Register</div>;
+import configuration from "./configuration.json";
+import { Input } from "@/inputControls/Input";
+import {
+  handleFormValidation,
+  hanldeFiledValidation,
+} from "@/Validations/appValidations";
+import Link from "next/link";
+const Register = () => {
+  const [inputControls, setInutControls] = useState(configuration);
+
+  const fnChange = (eve) => {
+    setInutControls(hanldeFiledValidation(eve, inputControls));
+  };
+  const handleRegister = () => {
+    const [isForminvalid, clonedInputControls, dataObj] =
+      handleFormValidation(inputControls);
+
+    if (isForminvalid) {
+      setInutControls(clonedInputControls);
+      return;
+    }
+    console.log("some fdsf", dataObj);
+  };
+  return (
+    <div className="container-fluid">
+      <h2 className="text-center my-3">Login</h2>
+      {inputControls?.map((obj) => {
+        const { lbl, errorMessage } = obj;
+        return (
+          <div className="row mb-3">
+            <div className="col-sm-5 text-end">
+              <b>{lbl}:</b>
+            </div>
+            <div className="col-sm-3">
+              <Input {...obj} />
+            </div>
+            <div className="col-sm-4">
+              <b className="text-danger">{errorMessage}</b>
+            </div>
+          </div>
+        );
+      })}
+
+      <div className="row">
+        <div className="offset-sm-5 col-sm-7">
+          <button onClick={handleRegister} className="btn btn-primary me-3">
+            Register
+          </button>
+          <Link href="/register">To Register</Link>
+        </div>
+      </div>
+    </div>
+  );
 };
 export default Register;
