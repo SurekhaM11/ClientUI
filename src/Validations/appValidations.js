@@ -1,5 +1,6 @@
 import { regExp } from "./appRegExp";
-const validateFields = (criteria, value, inputControlObj) => {
+
+const validateField = (value, criteria, inputControlObj) => {
   for (let i = 0; i < criteria.length; i++) {
     const { pattern, errorMessage } = regExp[criteria[i]];
     if (!pattern.test(value)) {
@@ -9,16 +10,28 @@ const validateFields = (criteria, value, inputControlObj) => {
   }
 };
 export const hanldeFiledValidation = (eve, inputControls) => {
-  const { name, value } = eve.target;
+  const { name, value, type, checked } = eve.target;
   const clonedInputControls = JSON.parse(JSON.stringify(inputControls));
   const inputControlObj = clonedInputControls.find((obj) => {
     return obj.model === name;
   });
-  inputControlObj.value = value;
+  if (type === "checkbox") {
+    const checkedValues = inputControlObj.value
+      ? inputControlObj.value.split(",")
+      : [];
+    if (checked) {
+      checkedValues.push(value);
+    } else {
+      const index = checkedValues.indexOf(value);
+      checkedValues.splice(index, 1);
+    }
+    inputControlObj.value = checkedValues.join();
+  } else {
+    inputControlObj.value = value;
+  }
   inputControlObj.errorMessage = "";
   const criteria = inputControlObj.criteria;
-
-  validateFields(criteria, value, inputControlObj);
+  validateField(inputControlObj.value, criteria, inputControlObj);
   return clonedInputControls;
 };
 
@@ -28,7 +41,7 @@ export const handleFormValidation = (inputControls) => {
   clonedInputControls.forEach((inputControlObj) => {
     const { value, criteria, model } = inputControlObj;
     dataObj[model] = value;
-    validateFields(criteria, value, inputControlObj);
+    validateField(value, criteria, inputControlObj);
   });
   const isFormInvalid = clonedInputControls.some((inputControlObj) => {
     return inputControlObj?.errorMessage?.length > 0;

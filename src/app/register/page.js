@@ -8,6 +8,8 @@ import {
   hanldeFiledValidation,
 } from "@/Validations/appValidations";
 import Link from "next/link";
+import { Select } from "@/inputControls/Select";
+import { Textarea } from "@/inputControls/Textarea";
 const Register = () => {
   const [inputControls, setInutControls] = useState(configuration);
 
@@ -24,19 +26,27 @@ const Register = () => {
     }
     console.log("some fdsf", dataObj);
   };
+  const prepareInputControls = (tag, obj) => {
+    switch (tag) {
+      case "input":
+        return <Input {...obj} handleChange={fnChange} />;
+      case "select":
+        return <Select {...obj} handleChange={fnChange} />;
+      default:
+        return <Textarea {...obj} handleChange={fnChange} />;
+    }
+  };
   return (
     <div className="container-fluid">
       <h2 className="text-center my-3">Login</h2>
       {inputControls?.map((obj) => {
-        const { lbl, errorMessage } = obj;
+        const { lbl, errorMessage, tag } = obj;
         return (
           <div className="row mb-3">
             <div className="col-sm-5 text-end">
               <b>{lbl}:</b>
             </div>
-            <div className="col-sm-3">
-              <Input {...obj} />
-            </div>
+            <div className="col-sm-3">{prepareInputControls(tag, obj)}</div>
             <div className="col-sm-4">
               <b className="text-danger">{errorMessage}</b>
             </div>

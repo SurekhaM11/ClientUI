@@ -13,67 +13,7 @@ export const Input = ({
 }) => {
   switch (type) {
     case "text":
-      return (
-        <Fragment>
-          <input
-            name={model}
-            onChange={handleChange}
-            className="form-control"
-            type={type}
-          />
-        </Fragment>
-      );
     case "password":
-      return (
-        <Fragment>
-          <input
-            name={model}
-            onChange={handleChange}
-            className="form-control"
-            type={type}
-          />
-        </Fragment>
-      );
-    case "radio":
-      return (
-        <Fragment>
-          {options.map((options) => {
-            return (
-              <Fragment>
-                {" "}
-                <input
-                  name={model}
-                  onChange={handleChange}
-                  type={type}
-                  value={options}
-                  className="mx-2"
-                />
-                {options}
-              </Fragment>
-            );
-          })}
-        </Fragment>
-      );
-    case "checkbox":
-      return (
-        <Fragment>
-          {options.map((options) => {
-            return (
-              <Fragment>
-                {" "}
-                <input
-                  name={model}
-                  onChange={handleChange}
-                  type={type}
-                  value={options}
-                  className="mx-2"
-                />
-                {options}
-              </Fragment>
-            );
-          })}
-        </Fragment>
-      );
     case "date":
       return (
         <Fragment>
@@ -82,9 +22,53 @@ export const Input = ({
             onChange={handleChange}
             className="form-control"
             type={type}
+            value={value}
           />
         </Fragment>
       );
+    case "radio":
+      return (
+        <Fragment>
+          {options.map((options, index) => {
+            return (
+              <Fragment>
+                {" "}
+                <input
+                  name={model}
+                  onChange={handleChange}
+                  type={type}
+                  value={options[index]}
+                  className="mx-2"
+                  checked={value == values[index]}
+                />
+                {options}
+              </Fragment>
+            );
+          })}
+        </Fragment>
+      );
+    case "checkbox":
+      const checkedArr = value.split(",");
+      return (
+        <Fragment>
+          {options.map((val, index) => {
+            return (
+              <>
+                <input
+                  checked={checkedArr.includes(values[index])}
+                  value={values[index]}
+                  className="ms-3"
+                  name={model}
+                  onChange={handleChange}
+                  type={type}
+                />{" "}
+                {val}
+              </>
+            );
+          })}
+        </Fragment>
+      );
+
     case "select":
       return (
         <Fragment>
