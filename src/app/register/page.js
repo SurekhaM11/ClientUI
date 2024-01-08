@@ -38,7 +38,7 @@ const Register = () => {
   };
   return (
     <div className="container-fluid">
-      <h2 className="text-center my-3">Login</h2>
+      <h2 className="text-center my-3">Register</h2>
       {inputControls?.map((obj) => {
         const { lbl, errorMessage, tag } = obj;
         return (
@@ -59,7 +59,7 @@ const Register = () => {
           <button onClick={handleRegister} className="btn btn-primary me-3">
             Register
           </button>
-          <Link href="/register">To Register</Link>
+          <Link href="/">To Login</Link>
         </div>
       </div>
     </div>
