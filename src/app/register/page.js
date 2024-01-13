@@ -6,25 +6,49 @@ import { Input } from "@/inputControls/Input";
 import {
   handleFormValidation,
   hanldeFiledValidation,
+  formReset,
 } from "@/Validations/appValidations";
 import Link from "next/link";
 import { Select } from "@/inputControls/Select";
 import { Textarea } from "@/inputControls/Textarea";
+import axios from "axios";
+import { appStore } from "@/store/appStore";
+import { toast } from "react-toastify";
 const Register = () => {
   const [inputControls, setInutControls] = useState(configuration);
 
   const fnChange = (eve) => {
     setInutControls(hanldeFiledValidation(eve, inputControls));
   };
-  const handleRegister = () => {
-    const [isForminvalid, clonedInputControls, dataObj] =
-      handleFormValidation(inputControls);
+  const handleRegister = async () => {
+    try {
+      const [isForminvalid, clonedInputControls, dataObj] =
+        handleFormValidation(inputControls);
 
-    if (isForminvalid) {
-      setInutControls(clonedInputControls);
-      return;
+      if (isForminvalid) {
+        setInutControls(clonedInputControls);
+        return;
+      }
+      const result = await axios.post("http://localhost:2020/std/reg-std", {
+        data: dataObj,
+      });
+
+      const { acknowledged, insertedId } = result?.data;
+      if (acknowledged && insertedId) {
+        toast.success("inserted data successfully");
+        setInutControls(formReset(inputControls));
+      } else {
+        toast.error("data not inserted");
+      }
+      appStore.dispatch({ type: "LOADER", payload: true });
+    } catch (exc) {
+      console.error(exc);
+      toast.error("something went wrong");
+    } finally {
+      appStore.dispatch({ type: "LOADER", payload: false });
     }
-    console.log("some fdsf", dataObj);
+
+    //console.log("some fdsf", dataObj);
   };
   const prepareInputControls = (tag, obj) => {
     switch (tag) {
@@ -39,10 +63,10 @@ const Register = () => {
   return (
     <div className="container-fluid">
       <h2 className="text-center my-3">Register</h2>
-      {inputControls?.map((obj) => {
+      {inputControls?.map((obj, index) => {
         const { lbl, errorMessage, tag } = obj;
         return (
-          <div className="row mb-3">
+          <div key={index} className="row mb-3">
             <div className="col-sm-5 text-end">
               <b>{lbl}:</b>
             </div>

@@ -48,3 +48,10 @@ export const handleFormValidation = (inputControls) => {
   });
   return [isFormInvalid, clonedInputControls, dataObj];
 };
+export const formReset = (inputControls) => {
+  const clonedInputControls = JSON.parse(JSON.stringify(inputControls));
+  clonedInputControls.forEach((inputControlObj) => {
+    inputControlObj.value = "";
+  });
+  return clonedInputControls;
+};
