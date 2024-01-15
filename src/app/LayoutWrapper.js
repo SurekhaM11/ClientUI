@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 const LayoutWrapper = ({ children }) => {
   const state = useSelector((state) => state);
-  console.log("state:", state);
+  //console.log("state:", state);
   return (
     <div>
       <Header />

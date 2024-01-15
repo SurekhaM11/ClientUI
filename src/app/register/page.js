@@ -11,9 +11,9 @@ import {
 import Link from "next/link";
 import { Select } from "@/inputControls/Select";
 import { Textarea } from "@/inputControls/Textarea";
-import axios from "axios";
 import { appStore } from "@/store/appStore";
 import { toast } from "react-toastify";
+import { API } from "../common/API";
 const Register = () => {
   const [inputControls, setInutControls] = useState(configuration);
 
@@ -29,9 +29,12 @@ const Register = () => {
         setInutControls(clonedInputControls);
         return;
       }
-      const result = await axios.post("http://localhost:2020/std/reg-std", {
+      const result = API.fnSendPostReq("/std/reg-std", {
         data: dataObj,
       });
+      // const result = await axios.post("http://localhost:2020/std/reg-std", {
+      //   data: dataObj,
+      // });
 
       const { acknowledged, insertedId } = result?.data;
       if (acknowledged && insertedId) {

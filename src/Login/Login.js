@@ -8,22 +8,51 @@ import {
   hanldeFiledValidation,
   handleFormValidation,
 } from "@/Validations/appValidations";
+import { API } from "@/app/common/API";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { Cookies } from "@/app/common/cookie";
+
 export const Login = () => {
   const [inputControls, setInutControls] = useState(configuration);
+  const dispatch = useDispatch(); //alternate to dispatch from store
   const fnChange = (eve) => {
     setInutControls(hanldeFiledValidation(eve, inputControls));
   };
 
-  const handleLogin = () => {
-    const [isForminvalid, clonedInputControls, dataObj] =
-      handleFormValidation(inputControls);
+  const handleLogin = async () => {
+    try {
+      const [isForminvalid, clonedInputControls, dataObj] =
+        handleFormValidation(inputControls);
 
-    if (isForminvalid) {
-      setInutControls(clonedInputControls);
-      return;
+      if (isForminvalid) {
+        setInutControls(clonedInputControls);
+        return;
+      }
+      //console.log("some fdsf", dataObj);
+      const result = await API.fnSendPostReq("/std/login", {
+        data: dataObj,
+      });
+      dispatch({ type: "LOADER", payload: true });
+      console.log("result", result?.data?.length);
+      if (result?.data?.length > 0) {
+        toast.success("Valid user");
+        console.log("valid user");
+        const { token, _id } = result?.data[0];
+        dispatch({ type: "AUTH", payload: true });
+        Cookies.setItem("token", token);
+        Cookies.setItem("id", _id);
+      } else {
+        toast.error("Invalid user");
+        console.log("invalid user");
+      }
+    } catch (err) {
+      console.error("login error", err);
+    } finally {
+      dispatch({ type: "LOADER", payload: false });
     }
-    console.log("some fdsf", dataObj);
   };
+
   return (
     <div className="container-fluid">
       <h2 className="text-center my-3">Login</h2>
