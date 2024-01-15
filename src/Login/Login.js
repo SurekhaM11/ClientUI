@@ -14,10 +14,10 @@ import { toast } from "react-toastify";
 import { Cookies } from "@/app/common/cookie";
 
 export const Login = () => {
-  const [inputControls, setInutControls] = useState(configuration);
+  const [inputControls, setInputControls] = useState(configuration);
   const dispatch = useDispatch(); //alternate to dispatch from store
   const fnChange = (eve) => {
-    setInutControls(hanldeFiledValidation(eve, inputControls));
+    setInputControls(hanldeFiledValidation(eve, inputControls));
   };
 
   const handleLogin = async () => {
@@ -26,7 +26,7 @@ export const Login = () => {
         handleFormValidation(inputControls);
 
       if (isForminvalid) {
-        setInutControls(clonedInputControls);
+        setInputControls(clonedInputControls);
         return;
       }
       //console.log("some fdsf", dataObj);
@@ -59,7 +59,7 @@ export const Login = () => {
       {inputControls?.map(
         ({ lbl, type, errorMessage, value, model, index }) => {
           return (
-            <div key={index} className="row mb-3">
+            <div key={model} className="row mb-3">
               <div className="col-sm-5 text-end">
                 <b>{lbl}:</b>
               </div>

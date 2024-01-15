@@ -31,10 +31,9 @@ export const Input = ({
         <Fragment>
           {options.map((options, index) => {
             return (
-              <Fragment>
+              <Fragment key={index}>
                 {" "}
                 <input
-                  key={index}
                   name={model}
                   onChange={handleChange}
                   type={type}
@@ -54,7 +53,7 @@ export const Input = ({
         <Fragment>
           {options.map((val, index) => {
             return (
-              <>
+              <Fragment key={index}>
                 <input
                   key={index}
                   checked={checkedArr.includes(values[index])}
@@ -65,7 +64,7 @@ export const Input = ({
                   type={type}
                 />{" "}
                 {val}
-              </>
+              </Fragment>
             );
           })}
         </Fragment>
