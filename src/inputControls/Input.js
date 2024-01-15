@@ -56,6 +56,7 @@ export const Input = ({
             return (
               <>
                 <input
+                  key={index}
                   checked={checkedArr.includes(values[index])}
                   value={values[index]}
                   className="ms-3"
