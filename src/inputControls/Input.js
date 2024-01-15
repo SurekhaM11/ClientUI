@@ -34,6 +34,7 @@ export const Input = ({
               <Fragment>
                 {" "}
                 <input
+                  key={index}
                   name={model}
                   onChange={handleChange}
                   type={type}
